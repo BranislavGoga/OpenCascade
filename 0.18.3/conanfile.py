@@ -4,7 +4,7 @@ from conans import ConanFile, CMake, tools
 from conans.util import files
 
 class OpenCascadeConan(ConanFile):
-    name = "occ"
+    name = "OpenCascade"
     version = "0.18.3"
     ZIP_FOLDER_NAME = "oce-OCE-%s" % version
     license = "https://github.com/tpaviot/oce/blob/master/LICENSE_LGPL_21.txt"
