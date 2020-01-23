@@ -1,4 +1,5 @@
 import os
+import pprint
 
 from conans import ConanFile, CMake, tools
 from conans.util import files
@@ -22,11 +23,12 @@ class OpenCascadeConan(ConanFile):
         os.unlink(zip_name)
 
     def build(self):
-        buildDir = "_build"
-        files.mkdir(buildDir)
-        with tools.chdir(buildDir):
+        #buildDir = "_build"
+        #files.mkdir(buildDir)
+        #with tools.chdir(buildDir):
             cmake = CMake(self)
             cmake.verbose = True
+            cmake.definitions['OCE_INSTALL_PREFIX'] = "."
             cmake.definitions['OCE_DATA_EXCHANGE'] = True
             cmake.definitions['OCE_DRAW'] = False
             cmake.definitions['OCE_MODEL'] = True
@@ -39,19 +41,23 @@ class OpenCascadeConan(ConanFile):
             cmake.definitions['OCE_WITH_FREE_IMAGE'] = False
             cmake.definitions['OCE_WITH_GL2PS'] = False
             cmake.definitions['OCE_WITH_VTK'] = False
-            cmake.configure(build_dir=".", source_dir="../%s" % self.ZIP_FOLDER_NAME)
+            cmake.configure(build_dir=".", source_dir="%s" % self.ZIP_FOLDER_NAME)
             cmake.build(build_dir=".")
             cmake.install()
 
     def package(self):
-        #self.copy("*.h", dst="include", src="oce")
-        #self.copy("*oce.lib", dst="lib", keep_path=False)
-        #self.copy("*.dll", dst="bin", keep_path=False)
-        #self.copy("*.so", dst="lib", keep_path=False)
-        #self.copy("*.dylib", dst="lib", keep_path=False)
-        #self.copy("*.a", dst="lib", keep_path=False)
-        pass
+        self.copy("*.h", dst="include")
+        self.copy("*.hxx", dst="include")
+        self.copy("*.lxx", dst="include")
+        self.copy("*.lib", dst="lib", keep_path=False)
+        self.copy("*.dll", dst="bin", keep_path=False)
+        self.copy("*.so", dst="lib", keep_path=False)
+        self.copy("*.dylib", dst="lib", keep_path=False)
+        self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        #self.cpp_info.libs = ["oce"]
+        #self.cpp_info.include_dirs = ["include"]
+        #self.cpp_info.bin_dirs = ["bin"]
+        #self.cpp_info.lib_dirs = ["lib"]
+        self.cpp_info.src_dirs = ["src"]
         pass
